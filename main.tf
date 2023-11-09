@@ -8,13 +8,21 @@ resource "azurerm_virtual_network" "spoke" {
   location            = azurerm_resource_group.dddAdelaide.location
   resource_group_name = azurerm_resource_group.dddAdelaide.name
 
-  address_space = ["192.168.1.0/24"]
-  subnet {
-    name           = "vm"
-    address_prefix = "192.168.1.0/27"
+  address_space = [var.networking.address_space]
+  dynamic "subnet" {
+    for_each = local.subnets
+    content {
+      name           = subnet.value.name
+      address_prefix = subnet.value.address_prefix
+    }
   }
-  subnet {
-    name           = "app"
-    address_prefix = "192.168.1.32/27"
+}
+
+locals {
+  deployed_subnets = {
+    for o in azurerm_virtual_network.spoke.subnet : o.name => {
+      id             = o.id
+      address_prefix = o.address_prefix
+    }
   }
 }

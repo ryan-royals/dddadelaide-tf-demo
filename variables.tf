@@ -26,3 +26,21 @@ variable "naming" {
     - location_code: 3 letter code for the datacenter location. Example: 'aue'
     EOT
 }
+
+variable "networking" {
+  type = object({
+    address_space = string
+    subnets = list(object({
+      name           = string
+      address_prefix = number
+    }))
+  })
+  description = <<EOT
+    Networking configuration for the virtual network
+    
+    - address_space: CIDR Block for the virtual network. Example: "192.168.1.1/24"
+    - subnets: List of subnets to create in the virtual network. 
+        - name: Name of the subnet. Example: "vm"
+        - address_prefix: CIDR Notation for the subnet. Example: "27"
+    EOT
+}
