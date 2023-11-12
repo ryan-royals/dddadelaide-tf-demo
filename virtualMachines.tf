@@ -5,8 +5,8 @@ module "vm" {
 
   source = "./modules/virtual_machine"
 
-  resource_group_name = azurerm_resource_group.dddAdelaide.name
-  location            = azurerm_resource_group.dddAdelaide.location
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
 
   vm_name     = join("-", concat(local.naming.prefix, ["vm"], local.naming.suffix, [each.value.vm_name_suffix]))
   vm_hostname = each.value.vm_hostname
